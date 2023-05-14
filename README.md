@@ -1,11 +1,13 @@
 # KuroSoup 🍲
 
-A simple, tiny Python library that's made specifically to abstract web
-scraping and parsing with the help of Beautiful Soup and requests with minimal code footprint!
+A simple, tiny Python library that's made specifically to abstract web scraping
+and parsing with the help of Beautiful Soup and requests with minimal code
+footprint!
 
 ## Installation
 
-Installing the library is by cloning this repository and importing the library like so:
+Installing the library is by cloning this repository and importing the library
+like so:
 
 ```py
 import KuroSoup
