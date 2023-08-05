@@ -1,0 +1,14 @@
+{
+  "name": "kuro-utils",
+  "version": "1.0.0",
+  "private": true,
+  "author": "Kerby Keith Aquino <skepfoosky15@gmail.com>",
+  "license": "MIT",
+  "workspaces": [
+    "configs/*"
+  ],
+  "dependencies": {
+    "@kuro-utils/prettier": "*",
+    "typescript": "^5.1.6"
+  }
+}
