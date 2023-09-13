@@ -1,3 +1,4 @@
-import type { OmitUnion, PickUnion, PartialRecord } from "./Partials"
+import type { PartialRecord, PartialArray } from "./Partials"
+import type { OmitUnion, PickUnion } from "./Unions"
 
-export { OmitUnion, PickUnion, PartialRecord }
+export { OmitUnion, PickUnion, PartialRecord, PartialArray }
