@@ -5,8 +5,7 @@
   "author": "Kerby Keith Aquino <skepfoosky15@gmail.com>",
   "license": "MIT",
   "workspaces": [
-    "configs/*",
-    "web/*"
+    "configs/*"
   ],
   "dependencies": {
     "@kuro-utils/prettier": "*",
