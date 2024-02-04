@@ -6,4 +6,3 @@ export type PartialArray<T> = Array<Partial<T>>
 export type PartialRecord<K extends PropertyKey, T = string> = Partial<
   Record<K, T>
 >
-

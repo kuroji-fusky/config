@@ -1,7 +1,4 @@
 {
   "name": "@kuro-utils/prettier",
-  "version": "0.0.0",
-  "files": [
-    "index.js"
-  ]
+  "version": "0.0.0"
 }
