@@ -4,7 +4,9 @@ export default {
   content: [],
   theme: {
     extend: {
-      spacing: { unset: "unset" },
+      spacing: {
+        unset: "unset"
+      },
       colors: {
         current: "currentColor"
       }
