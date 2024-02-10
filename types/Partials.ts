@@ -1,4 +1,4 @@
-export type PartialArray<T> = Array<Partial<T>>
+export type PartialArray<T> = Partial<T>[]
 
 /**
  * A `Record` type generic wrapped in `Partial` generic

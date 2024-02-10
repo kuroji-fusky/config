@@ -5,10 +5,16 @@
   "author": "Kerby Keith Aquino <skepfoosky15@gmail.com>",
   "license": "MIT",
   "workspaces": [
-    "configs/*"
+    "design-system",
+    "configs/*",
+    "types"
   ],
   "dependencies": {
     "@kuro-utils/prettier": "*",
+    "react": "^18.2.0",
     "typescript": "^5.1.6"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.55"
   }
 }

@@ -1,3 +1,4 @@
-import type { PartialRecord, PartialArray } from "./Partials"
+import { PartialArray, PartialRecord } from "./Partials"
+import { MapElement, ReactMapElement } from "./DOM"
 
-export { PartialRecord, PartialArray }
+export { MapElement, ReactMapElement, PartialArray, PartialRecord }
