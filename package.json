@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "author": "Kerby Keith Aquino <skepfoosky15@gmail.com>",
-  "license": "MIT",
+  "license": "ISC",
   "workspaces": [
-    "design-system",
-    "configs/*",
+    "configs/**",
     "types"
   ],
   "dependencies": {

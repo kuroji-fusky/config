@@ -1,5 +1,5 @@
 {
-  "name": "@kuro-utils/tw",
+  "name": "@kuro-utils/tailwind",
   "private": true,
   "version": "0.0.0",
   "devDependencies": {
