@@ -1,0 +1,10 @@
+{
+  "overrides": [
+    {
+      "files": ["./**/tailwind.config.*{cjs,js,ts}"],
+      "options": {
+        "printWidth": 125
+      }
+    }
+  ]
+}

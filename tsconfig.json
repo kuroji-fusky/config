@@ -5,5 +5,5 @@
     "moduleResolution": "NodeNext",
     "esModuleInterop": true
   },
-  "exclude": ["configs/**"]
+  "exclude": ["configs/eslint-config-*", "configs/prettier"]
 }

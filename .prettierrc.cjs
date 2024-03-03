@@ -2,9 +2,15 @@ module.exports = {
   ...require("@kuro-utils/prettier"),
   overrides: [
     {
-      files: ["./types/DOM.ts", "./types/Partials.ts"],
+      files: ["./types/*.ts", "./config/tailwind/index.ts"],
       options: {
         printWidth: 120
+      }
+    },
+    {
+      files: ["./configs/eslint-config-kuroji/*.js"],
+      options: {
+        printWidth: 75
       }
     }
   ]
