@@ -6,9 +6,9 @@ An assortment of configs I've written from scratch and in use for projects I wor
 
 - `configs`
   - [`eslint-config-kuroji`](/configs/eslint-config-kuroji/) - My base ESLint config
-  - [`eslint-config-kuroji`](/configs/eslint-config-kuroji/) - My Vue ESlint config, which extends to the base
-  - [`prettier`](/configs/prettier/) - Simple prettier config
-  - [`tailwind`](/configs/tailwind/) - Tailwind CSS config that extends radial gradients and stuff
+  - [`eslint-config-kuroji-vue`](/configs/eslint-config-kuroji-vue/) - My Vue ESlint config, which extends to the base
+  - [`prettier`](/configs/prettier/) - Prettier config
+  - [`tailwind`](/configs/tailwind/) - Tailwind CSS config that extends radial gradients, flexible grids, and stuff
 - `types` - Custom types mostly tailored for DOM and React stuff
 
 ## Usage
@@ -33,7 +33,8 @@ the whole config folder because you're cool like me 😎
 
 ### Extending a Prettier config
 
-You can "extend" a Prettier config by using a JS config file as there's no support to extend another config with `.prettierrc.json` unfortunately.
+You can "extend" a Prettier config by using a JS config file as there's no support to extend
+another config with `.prettierrc.json` unfortunately.
 
 ```js
 module.exports = require("@kuro-utils/prettier")
