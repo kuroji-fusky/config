@@ -28,6 +28,7 @@ module.exports = {
     "react/no-unescaped-entities": "off",
 
     "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-namespace": "off",
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/member-delimiter-style": "warn",
     "@typescript-eslint/no-non-null-assertion": "off",
