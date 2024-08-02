@@ -9,7 +9,6 @@
     "types"
   ],
   "dependencies": {
-    "@kuro-utils/prettier": "*",
     "@stylistic/eslint-plugin": "^1.6.3",
     "@typescript-eslint/eslint-plugin": "^7.1.0",
     "@typescript-eslint/parser": "^7.1.0",
