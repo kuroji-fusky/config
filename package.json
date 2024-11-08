@@ -13,7 +13,6 @@
     "typescript": "^5.1.6"
   },
   "devDependencies": {
-    "@fusky-labs/eslint-config-base": "*",
     "rimraf": "^5.0.5"
   }
 }
