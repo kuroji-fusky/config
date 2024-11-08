@@ -1,4 +1,7 @@
 import type { Config } from "tailwindcss"
+
+import formsPlugin from "@tailwindcss/forms"
+import typographyPlugin from "@tailwindcss/typography"
 import plugin from "tailwindcss/plugin"
 
 export default {
@@ -11,6 +14,9 @@ export default {
     }
   },
   plugins: [
+    typographyPlugin,
+    formsPlugin,
+    // Custom plugin
     plugin(({ addComponents }) => {
       addComponents({
         "a.link": {
