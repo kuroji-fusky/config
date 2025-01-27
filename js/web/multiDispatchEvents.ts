@@ -1,8 +1,8 @@
-type ElementOrWindow = Element | Window
+type ElementOrWindowTarget = Element | Window
 
 namespace DispatchMultiListeners {
   interface AdvancedEvents {
-    target: ElementOrWindow
+    target: ElementOrWindowTarget
     events: string | string[]
   }
 
@@ -11,6 +11,15 @@ namespace DispatchMultiListeners {
     | boolean
     | AddEventListenerOptions
     | EventListenerOptions
+}
+
+
+type CallbackFunction = ((e?: Event) => void)
+
+interface MappedEventTypes {
+  target: ElementOrWindowTarget,
+  event: string,
+  callback: CallbackFunction
 }
 
 /**
@@ -28,13 +37,13 @@ namespace DispatchMultiListeners {
  * dispatchCloseDialogEvents.dispose()
  * ```
  */
-export class DispatchMultiListeners<DOMTarget extends ElementOrWindow | null> {
+export class DispatchMultiListeners<DOMTarget extends ElementOrWindowTarget | null> {
   private definedEvents: DispatchMultiListeners.DefinedEvents
   private target: DOMTarget
   private globalEventOptions: DispatchMultiListeners.EventOptions
-  private __abortSignalHandler: AbortController
 
-  private __definedEventTypes: Array<{ target: ElementOrWindow, event: string } | never>
+  private __mappedEventTypes: Array<MappedEventTypes | never>
+  private __abortSignalHandler: AbortController
 
   constructor(
     target: DOMTarget,
@@ -45,12 +54,26 @@ export class DispatchMultiListeners<DOMTarget extends ElementOrWindow | null> {
     this.definedEvents = events
     this.globalEventOptions = options
 
-    this.__definedEventTypes = []
+    // To keep track of all defined event listeners so a user can dispose a certain event listener
+    this.__mappedEventTypes = []
+
+    // A safety net to remove ALL event listeners
     this.__abortSignalHandler = new AbortController()
 
     if (this.target !== null && typeof this.definedEvents === "object") {
       throw new TypeError("When defining multiple targets, the target parameter should be `null` and the event parameter should be an object.")
     }
+  }
+
+  /** @internal */
+  private __pushEvents<Callback extends CallbackFunction>(
+    target: ElementOrWindowTarget,
+    event: string,
+    callback: Callback,
+    options?: DispatchMultiListeners.EventOptions
+  ) {
+    target!.addEventListener(event, callback, options)
+    this.__mappedEventTypes.push({ target, event, callback })
   }
 
   /** 
@@ -60,7 +83,7 @@ export class DispatchMultiListeners<DOMTarget extends ElementOrWindow | null> {
    * @param callOnInit Call the function first before attaching its event listeners
    * @template Callback A compatible callback event-based function type
    * */
-  emit<Callback extends ((e?: Event) => void)>(callback: Callback, callOnInit?: boolean) {
+  emit<Callback extends CallbackFunction>(callback: Callback, callOnInit?: boolean) {
     if (!!callback && callOnInit) callback()
 
     const _eventOptions = typeof this.globalEventOptions !== "boolean"
@@ -78,12 +101,12 @@ export class DispatchMultiListeners<DOMTarget extends ElementOrWindow | null> {
         const { target, events: event } = definedEvent
 
         if (!Array.isArray(event)) {
-          target!.addEventListener(event, callback, _eventOptions)
+          this.__pushEvents(target, event, callback, _eventOptions)
           return
         }
 
         event.forEach((ev) => {
-          target!.addEventListener(ev, callback, _eventOptions)
+          this.__pushEvents(target, ev, callback, _eventOptions)
           return
         })
       }
@@ -94,7 +117,7 @@ export class DispatchMultiListeners<DOMTarget extends ElementOrWindow | null> {
     // WIP
   }
 
-  disposeAll() {
-    return this.__abortSignalHandler.abort()
+  disposeAll(optionalReason?: any) {
+    return this.__abortSignalHandler.abort(optionalReason)
   }
 }
