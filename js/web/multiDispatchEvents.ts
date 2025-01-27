@@ -1,23 +1,19 @@
 type ElementOrWindowTarget = Element | Window
 
-namespace DispatchMultiListeners {
-  interface AdvancedEvents {
-    target: ElementOrWindowTarget
-    events: string | string[]
-  }
-
-  export type DefinedEvents = (string | AdvancedEvents)[]
-  export type EventOptions =
-    | boolean
-    | AddEventListenerOptions
-    | EventListenerOptions
+interface _Target {
+  target: ElementOrWindowTarget
 }
 
+interface AdvancedEvents extends _Target {
+  events: string | string[]
+}
+
+type DefinedEvents = (string | AdvancedEvents)[]
+type EventOptions = boolean | AddEventListenerOptions | EventListenerOptions
 
 type CallbackFunction = ((e?: Event) => void)
 
-interface MappedEventTypes {
-  target: ElementOrWindowTarget,
+interface MappedEventTypes extends _Target {
   event: string,
   callback: CallbackFunction
 }
@@ -38,21 +34,20 @@ interface MappedEventTypes {
  * ```
  */
 export class DispatchMultiListeners<DOMTarget extends ElementOrWindowTarget | null> {
-  private definedEvents: DispatchMultiListeners.DefinedEvents
+  private definedEvents: DefinedEvents
   private target: DOMTarget
-  private globalEventOptions: DispatchMultiListeners.EventOptions
+  private eventOptions: EventOptions
 
   private __mappedEventTypes: Array<MappedEventTypes | never>
   private __abortSignalHandler: AbortController
 
   constructor(
     target: DOMTarget,
-    events: DispatchMultiListeners.DefinedEvents,
-    options?: DispatchMultiListeners.EventOptions
+    events: DefinedEvents,
+    options?: EventOptions
   ) {
     this.target = target
     this.definedEvents = events
-    this.globalEventOptions = options
 
     // To keep track of all defined event listeners so a user can dispose a certain event listener
     this.__mappedEventTypes = []
@@ -63,6 +58,10 @@ export class DispatchMultiListeners<DOMTarget extends ElementOrWindowTarget | nu
     if (this.target !== null && typeof this.definedEvents === "object") {
       throw new TypeError("When defining multiple targets, the target parameter should be `null` and the event parameter should be an object.")
     }
+
+    this.eventOptions = (typeof options !== "boolean"
+      ? { ...options, signal: this.__abortSignalHandler.signal }
+      : options) satisfies EventOptions
   }
 
   /** @internal */
@@ -70,7 +69,7 @@ export class DispatchMultiListeners<DOMTarget extends ElementOrWindowTarget | nu
     target: ElementOrWindowTarget,
     event: string,
     callback: Callback,
-    options?: DispatchMultiListeners.EventOptions
+    options?: EventOptions
   ) {
     target!.addEventListener(event, callback, options)
     this.__mappedEventTypes.push({ target, event, callback })
@@ -84,16 +83,13 @@ export class DispatchMultiListeners<DOMTarget extends ElementOrWindowTarget | nu
    * @template Callback A compatible callback event-based function type
    * */
   emit<Callback extends CallbackFunction>(callback: Callback, callOnInit?: boolean) {
-    if (!!callback && callOnInit) callback()
-
-    const _eventOptions = typeof this.globalEventOptions !== "boolean"
-      ? {
-        ...this.globalEventOptions, signal: this.__abortSignalHandler.signal
-      } : this.globalEventOptions satisfies DispatchMultiListeners.EventOptions
+    if (!!callback && callOnInit) {
+      callback()
+    }
 
     this.definedEvents.forEach((definedEvent) => {
       if (typeof definedEvent === "string") {
-        this.target!.addEventListener(definedEvent, callback, _eventOptions)
+        this.__pushEvents(this.target!, definedEvent, callback, this.eventOptions)
         return
       }
 
@@ -101,20 +97,35 @@ export class DispatchMultiListeners<DOMTarget extends ElementOrWindowTarget | nu
         const { target, events: event } = definedEvent
 
         if (!Array.isArray(event)) {
-          this.__pushEvents(target, event, callback, _eventOptions)
+          this.__pushEvents(target, event, callback, this.eventOptions)
           return
         }
 
-        event.forEach((ev) => {
-          this.__pushEvents(target, ev, callback, _eventOptions)
+        event.forEach((innerEvent) => {
+          this.__pushEvents(target, innerEvent, callback, this.eventOptions)
           return
         })
       }
     })
   }
 
-  dispose(event: string) {
-    // WIP
+  dispose(...eventsToDispose: string[]) {
+    this.definedEvents.forEach((definedEvent) => {
+      if (typeof definedEvent === "string") {
+        if (eventsToDispose !== null) {
+          // Implementation: WIP
+          return
+        }
+
+        // Automatically remove all event listeners if none are specified
+        this.__mappedEventTypes.forEach((mappedEvent) => {
+          const { target, event, callback } = mappedEvent
+
+          target.removeEventListener(event, callback)
+          return
+        })
+      }
+    })
   }
 
   disposeAll(optionalReason?: any) {
