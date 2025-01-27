@@ -2,7 +2,6 @@ import React from "react"
 import type { MutateType } from "./literals"
 
 type _JSX__IntrinsicElements = React.JSX.IntrinsicElements
-
 export type ReactMapElement<E extends keyof _JSX__IntrinsicElements> = _JSX__IntrinsicElements[E] extends React.DetailedHTMLProps<infer P, any> ? P : _JSX__IntrinsicElements[E]
 
 /**
@@ -13,5 +12,5 @@ export type ReactMapElement<E extends keyof _JSX__IntrinsicElements> = _JSX__Int
  * @template KeysToOmit Optional keys to exclude from the setters
  */
 export type MapUseStateSetters<T extends object, KeysToOmit extends keyof T = never> = T & {
-  [Property in keyof T as Property extends KeysToOmit ? never : MutateType<Property & string, "set">]: React.Dispatch<React.SetStateAction<T[Property]>>
+  [Property in keyof T as Property extends KeysToOmit ? never : MutateType<Capitalize<Property & string>, "set">]: React.Dispatch<React.SetStateAction<T[Property]>>
 }
