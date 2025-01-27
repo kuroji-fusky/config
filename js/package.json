@@ -5,7 +5,8 @@
   "author": "Kerby Keith Aquino <hello@kurojifusky.com>",
   "license": "ISC",
   "devDependencies": {
-    "typescript": "^5.1.6",
-    "rimraf": "^5.0.5"
+    "@types/react": "^18.2.55",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.1.6"
   }
 }

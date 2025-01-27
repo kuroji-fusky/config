@@ -25,13 +25,16 @@ namespace DispatchMultiListeners {
  * dispatchCloseDialogEvents.emit(handleCloseDialog)
  *
  * // Cleanup func
- * dispatchCloseDialogEvents.dispose(handleCloseDialog)
+ * dispatchCloseDialogEvents.dispose()
  * ```
  */
 export class DispatchMultiListeners<DOMTarget extends ElementOrWindow | null> {
   private definedEvents: DispatchMultiListeners.DefinedEvents
   private target: DOMTarget
-  private eventOptions: DispatchMultiListeners.EventOptions
+  private globalEventOptions: DispatchMultiListeners.EventOptions
+  private __abortSignalHandler: AbortController
+
+  private __definedEventTypes: Array<{ target: ElementOrWindow, event: string } | never>
 
   constructor(
     target: DOMTarget,
@@ -40,20 +43,34 @@ export class DispatchMultiListeners<DOMTarget extends ElementOrWindow | null> {
   ) {
     this.target = target
     this.definedEvents = events
-    this.eventOptions = options
+    this.globalEventOptions = options
+
+    this.__definedEventTypes = []
+    this.__abortSignalHandler = new AbortController()
 
     if (this.target !== null && typeof this.definedEvents === "object") {
-      throw new TypeError(
-        "When defining multiple targets, the target parameter should be `null` and the event parameter should be an object."
-      )
+      throw new TypeError("When defining multiple targets, the target parameter should be `null` and the event parameter should be an object.")
     }
   }
 
-  /** Adds the defined event listeners, can optionally call the func upon initialization */
-  emit(callback: (e?: unknown) => void, callOnInit?: boolean) {
+  /** 
+   * Adds the defined event listeners, can optionally call the func upon initialization
+   * 
+   * @param callback An event callback function
+   * @param callOnInit Call the function first before attaching its event listeners
+   * @template Callback A compatible callback event-based function type
+   * */
+  emit<Callback extends ((e?: Event) => void)>(callback: Callback, callOnInit?: boolean) {
+    if (!!callback && callOnInit) callback()
+
+    const _eventOptions = typeof this.globalEventOptions !== "boolean"
+      ? {
+        ...this.globalEventOptions, signal: this.__abortSignalHandler.signal
+      } : this.globalEventOptions satisfies DispatchMultiListeners.EventOptions
+
     this.definedEvents.forEach((definedEvent) => {
       if (typeof definedEvent === "string") {
-        this.target!.addEventListener(definedEvent, callback, this.eventOptions)
+        this.target!.addEventListener(definedEvent, callback, _eventOptions)
         return
       }
 
@@ -61,45 +78,23 @@ export class DispatchMultiListeners<DOMTarget extends ElementOrWindow | null> {
         const { target, events: event } = definedEvent
 
         if (!Array.isArray(event)) {
-          target!.addEventListener(event, callback, this.eventOptions)
+          target!.addEventListener(event, callback, _eventOptions)
           return
         }
 
         event.forEach((ev) => {
-          target!.addEventListener(ev, callback, this.eventOptions)
+          target!.addEventListener(ev, callback, _eventOptions)
           return
         })
       }
     })
-
-    if (Boolean(callback) && callOnInit) callback()
   }
 
-  /** Removes the defined event listeners */
-  dispose(callback: (e?: unknown) => void) {
-    this.definedEvents.forEach((definedEvent) => {
-      if (typeof definedEvent === "string") {
-        this.target!.removeEventListener(
-          definedEvent,
-          callback,
-          this.eventOptions
-        )
-        return
-      }
+  dispose(event: string) {
+    // WIP
+  }
 
-      if (typeof definedEvent === "object") {
-        const { target, events: event } = definedEvent
-
-        if (!Array.isArray(event)) {
-          target!.removeEventListener(event, callback, this.eventOptions)
-          return
-        }
-
-        event.forEach((ev) => {
-          target!.removeEventListener(ev, callback, this.eventOptions)
-          return
-        })
-      }
-    })
+  disposeAll() {
+    return this.__abortSignalHandler.abort()
   }
 }
