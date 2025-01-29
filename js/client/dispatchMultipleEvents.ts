@@ -33,7 +33,7 @@ interface MappedEventTypes extends _Target {
  * dispatchCloseDialogEvents.dispose()
  * ```
  */
-export class DispatchMultiListeners<DOMTarget extends ElementOrWindowTarget | null> {
+export class DispatchMultipleEvents<DOMTarget extends ElementOrWindowTarget | null> {
   private definedEvents: DefinedEvents
   private target: DOMTarget
   private eventOptions: EventOptions

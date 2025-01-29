@@ -2,9 +2,6 @@
   "private": true,
   "name": "@kuro-utils/types",
   "version": "0.0.0",
-  "dependencies": {
-    "react": "^18.2.0"
-  },
   "devDependencies": {
     "@types/react": "^18.2.55"
   }
