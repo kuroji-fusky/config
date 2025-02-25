@@ -2,6 +2,15 @@ import React from "react"
 import type { MutateType } from "./literals"
 
 type _JSX__IntrinsicElements = React.JSX.IntrinsicElements
+
+/**
+ * Gets all the React attributes from a given native HTML tag
+ * 
+ * @template E An HTML Element
+ * @example
+ * type ReactButton = ReactMapElement<"button"> // React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
+ * type ReactSVGContainer = ReactMapElement<"svg"> // React.SVGProps<SVGSVGElement>
+ */
 export type ReactMapElement<E extends keyof _JSX__IntrinsicElements> = _JSX__IntrinsicElements[E] extends React.DetailedHTMLProps<infer P, any> ? P : _JSX__IntrinsicElements[E]
 
 /**
@@ -12,5 +21,5 @@ export type ReactMapElement<E extends keyof _JSX__IntrinsicElements> = _JSX__Int
  * @template KeysToOmit Optional keys to exclude from the setters
  */
 export type MapUseStateSetters<T extends object, KeysToOmit extends keyof T = never> = T & {
-  [Property in keyof T as Property extends KeysToOmit ? never : MutateType<Capitalize<Property & string>, "set">]: React.Dispatch<React.SetStateAction<T[Property]>>
+  [P in keyof T as P extends KeysToOmit ? never : MutateType<Capitalize<P & string>, "set">]: React.Dispatch<React.SetStateAction<T[P]>>
 }
