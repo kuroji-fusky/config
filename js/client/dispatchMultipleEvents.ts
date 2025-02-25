@@ -83,7 +83,7 @@ export class DispatchMultipleEvents<DOMTarget extends ElementOrWindowTarget | nu
    * @template Callback A compatible callback event-based function type
    * */
   emit<Callback extends CallbackFunction>(callback: Callback, callOnInit?: boolean) {
-    if (!!callback && callOnInit) {
+    if (typeof callback === "function" && callback && callOnInit) {
       callback()
     }
 
