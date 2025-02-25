@@ -16,16 +16,5 @@ Since I have no plans to publish this to the npm registry, you'll need to add th
 submodule and is best fitted for a monorepo setup.
 
 ```console
-git submodule add https://github.com/kuroji-fusky/kuro-shared-utils.git path/to/shared-utils/
-```
-
-### Monorepo setup
-
-If you're using Yarn workspaces, you can specify what you'll need. In most cases, you'll need
-the whole config folder because you're cool like me 😎
-
-```json
-{
-  "workspaces": ["utils/config/**"]
-}
+git submodule add https://github.com/kuroji-fusky/shared-utils.git path/to/shared-utils/
 ```
