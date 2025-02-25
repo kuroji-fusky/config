@@ -1,4 +1,4 @@
-// For the Python implementation, see kuropy/formatters/ytTimestamp.py
+// For the Python implementation, see kuropy/formatters/yt-timestamp.py
 /**
  * Parses timestamp retrieved from the YouTube API
  * 
