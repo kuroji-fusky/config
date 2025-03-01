@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "kuro-utils",
+  "name": "@kuroji-fusky/shared-utils",
   "version": "1.0.0",
   "author": "Kerby Keith Aquino <hello@kurojifusky.com>",
   "license": "ISC",
