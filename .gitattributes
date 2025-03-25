@@ -1,1 +1,11 @@
-* text=lf
+*                 eol=lf
+*.ps1             eol=crlf  linguist-detectable=true
+*.bat             eol=crlf  linguist-detectable=true
+*.cmd             eol=crlf
+*.*rc             text
+
+LICENSE           text
+NOTICE            text
+
+pnpm-lock*.yaml   text     -diff
+yarn.lock         text     -diff
