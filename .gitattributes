@@ -3,8 +3,5 @@
 
 *.json            linguist-language=jsonc
 
-LICENSE           text
-NOTICE            text
-
 pnpm-lock*.yaml   text     -diff
 yarn.lock         text     -diff
